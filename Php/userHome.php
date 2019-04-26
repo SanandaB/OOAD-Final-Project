@@ -1,4 +1,12 @@
-
+<!-- userHome.php can  be reached once a new user signs up or an existing user logs in to the system. 
+This page is an exact replica of the guestHome page with only two differences -
+1. There is username(currently logged in user) displayed on the top rigth corner of the page, on the navigation bar.
+It is a dropdown list with the following functioanlities which at this point only registered users are facilitated to perform.
+The options are to create listing, edit listing, delete listing and sign out.
+2. The get started button on the slider looks similar to the button on the slider of the guestHome.php page but the difference
+is, when this button is selected, session variable containing username is passed to the listings.php page to maintain
+the username on navigation bar and forward it to the subsequesnt pages as long as the session is active or the user is signed in to the system.
+-->
 <?php
 	
 	
