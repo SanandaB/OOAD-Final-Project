@@ -1,15 +1,23 @@
+
+<!--
+Listing Details page is reached from Listings page, on selecting a particular listing. 
+This page contains the elaborate description such as owner information, store hours and location.
+ALong with the menu which is a form for users to select menu items and quantities.
+-->
+
 <?php
 	
-	
+	//Connecting to database
 	$db=mysqli_connect("localhost","root","","testdb");
 	session_start();
+	//Checking to see if create buttob to add a listing is selected or not.
 	if (isset($_POST['create_btn'])){
 		
 		$name=mysqli_real_escape_string($db,$_POST['name']);
 		$info=mysqli_real_escape_string($db,$_POST['info']);
 		$time=mysqli_real_escape_string($db,$_POST['time']);
 		$location=mysqli_real_escape_string($db,$_POST['location']);
-		
+		//Inserting user inputs into the listing table of database.
 		$sql = "INSERT INTO listing(name,information,time,location) VALUES ('$name','$info','$time','$location')";
 		mysqli_query($db,$sql);
 		$_SESSION['message']="Listing Created!";
@@ -18,24 +26,26 @@
 	}
 	
 	else if (isset($_POST['btn_checkout'])){
-		//session_start();
-		//print_r($_POST);
-		//echo "hello";
+		//Collecting username(currently logged in user) in name variable to be inserted into the menu table of the database to identify whicg user ordered what and in what quantity.
 		$name=$_SESSION['username'];
 		$itemarr=$_POST["item"];
+		//menu items are inputted in form of array and then implodede to form a list before inserting into database.
 		$newitems=implode(",",$itemarr);
 		$cost="$60";
+		//Inserting user inputs into the customerOrder table of the database.
 		$sql = "INSERT INTO customerorder(CustomerName,Items,TotalCost) VALUES ('$name','$newitems','$cost')";
 		mysqli_query($db,$sql);
 		$_SESSION['message']="Order Selected!";
 		$_SESSION['username']= $name; 
 		header("location:checkout.php"); 
 	}
-	
+	//Checking if post button from review form is selected or not. 
 	else if (isset($_POST['post_btn'])){
+		//To insert user reviews into the review table of database. 
 		$name=$_SESSION['username'];
 		$time=date("h:i:sa");
 		$date=date("Y/m/d");
+		//Inserting username(currently logged in user), review, date and time into the reviews table.
 		$review=mysqli_real_escape_string($db,$_POST['review']);
 		$sql = "INSERT INTO reviews(name,review,date,time) VALUES ('$name','$review','$date','$time')";
 		mysqli_query($db,$sql);
@@ -84,12 +94,6 @@
   <!-- Responsive Stylesheet File -->
   <link href="css/responsive.css" rel="stylesheet">
 
-  <!-- =======================================================
-    Theme Name: eBusiness
-    Theme URL: https://bootstrapmade.com/ebusiness-bootstrap-corporate-template/
-    Author: BootstrapMade.com
-    License: https://bootstrapmade.com/license/
-  ======================================================= -->
   
   
   <style>
@@ -477,7 +481,7 @@
                     <span class="tag-meta"><i class="fa fa-location-arrow"></i><a href="#">location</a></span>
 					<span><i class="material-icons"><a onclick="openFormMenu()">restaurant_menu</i> menu</a>
 					
-
+						<!-- Menu form with checkbox for menu items and corresponding dropdowns to select quantity and view price-->
 						<div class="form-popup" id="myFormMenu">
 						  <form class="form-container" style="max-width: 1000px; " method="post" action="listingDetail.php">
 							<h1>Menu</h1>
@@ -702,6 +706,7 @@
                   <div class="entry-content">
 				  <b><h2>Owner Info</h2></b>
 				  <?php
+			  //retreiving and displaying owner information and store hours and location.
 					$db=mysqli_connect("localhost","root","","testdb");
 					$info = mysqli_query($db,"select information from listing where name='Mikes Breakfast'");
 					$rowinfo = $info->fetch_assoc();
@@ -751,7 +756,7 @@
                             <img src="img/team/1.jpg" width="60" height="80" alt="post-author" style="border-radius:50%;">
                           </div>
                           <div class="comments-content-wrap">
-                            <span>
+                            <span><!-- Displaying reviews of users -->
 								<b><a href="#"><?php
 								
 									$loc = mysqli_query($db,"select name from reviews where name='Bhupendra'");
@@ -827,6 +832,7 @@
                 <div class="comment-respond">
                   <h3 class="comment-reply-title">Leave a Review </h3>
                   <span class="email-notes">Required fields are marked *</span>
+			<!-- review form to take users name(currently logged into system) along with user review to store to database.-->
                   <form method="POST" action="listingDetail.php">
                     <div class="row">
 
@@ -840,7 +846,8 @@
               </div>
 			  
 			  
-  <script>		  
+  <script>
+	  //Script to show user that their review has been successfully posted.
 	function validatePost(){
 		alert("Congratulations your review has been posted!");
 	}
