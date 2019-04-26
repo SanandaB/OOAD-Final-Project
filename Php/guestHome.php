@@ -1,21 +1,34 @@
+<!-- 
+guestHome.php is basically the landing page of our website - FoddzPa. 
+This page has all the components of the entire website.
+There are register and login options on the top right corner on the navigation bar along with other options to route across the website.
+Guest user can navigate across the website without having to register or login.
+However a new user or an existent user has the option to sign up or login.
+-->
+
+
 <?php
 	
-	
+	//Connecting to our database - testdb.
 	$db=mysqli_connect("localhost","root","","testdb");
-
+	//Checking to see if register button has been selected
 	if (isset($_POST['register_btn'])){
 		session_start();
+		//Collecting all user inputs in variables.
 		$username=mysqli_real_escape_string($db,$_POST['username']);
 		$email=mysqli_real_escape_string($db,$_POST['email']);
 		$psw=mysqli_real_escape_string($db,$_POST['psw']);
 		$cpsw=mysqli_real_escape_string($db,$_POST['cpsw']);
-		
+		//Matching the two passwords to see if they match
 		if ($psw == $cpsw){
-				$psw = md5($psw);//hashing psw for security
+				$psw = md5($psw);//encryting password for security using md5
+				//Inserting all user details into user table of testdb.
 				$sql = "INSERT INTO user(name,email,password) VALUES ('$username','$email','$psw')";
 				mysqli_query($db,$sql);
 				$_SESSION['message']="You are now logged in!";
+			//Sending username in session variable to the userHome.php page to be displayed on the top right corner on navigation bar of user home.
 				$_SESSION['username']= $username;
+			//redirecting new user to the user home page
 				header("location:userHome.php"); 
 		}
 		else{
@@ -28,6 +41,7 @@
 		//get values passed from guestHome.php login form
 		$username=$_POST['username'];
 		$password=$_POST['password'];
+		//encrypting user input for passowrd in login form to match with existing password in user table of db.
 		$password=md5($password);
 		//prevent mysql injection
 		$username=stripcslashes($username);
@@ -40,7 +54,7 @@
 		$result = mysqli_query($db,"select * from user where name='$username' and password='$password'");
 				//or die("failed to query database",mysql_error());
 				
-		//$row = mysql_fetch_array($db,$result);
+		//fectch each row at a time
 		$row = $result->fetch_assoc();
 		
 		if ($row['name'] == $username && $row['password']==$password){
@@ -151,7 +165,7 @@
                   </li>
 				  <li>
 					<a onclick="openForm()">Login</a>
-
+					<!-- login Form: Popup form to input user  credentials -->
 					<div class="form-popup" id="myForm">
 					  <form class="form-container" method="POST" action="guestHome.php">
 						<h1>Login</h1>
@@ -170,7 +184,8 @@
 				  
 				  <li>
 					<a onclick="openFormReg()">Sign Up</a>
-
+					<!-- registration Form
+						Pop up form to input user details		-->
 					<div class="form-popup" id="myFormReg">
 					  <form class="form-container" style="max-width: 400px;" method="post" action="guestHome.php">
 						<h1>Regsiter</h1>
@@ -206,6 +221,7 @@
   
   <!-- header end -->
   <script>
+	  //script to open and close form based on user selection
 	function openForm() {
 	  document.getElementById("myForm").style.display = "block";
 	}
@@ -245,7 +261,7 @@
 		<img src="img/slider/4.jpg" alt="" title="#slider-direction-3" />
 		<img src="img/slider/5.jpg" alt="" title="#slider-direction-3" />
       </div>
-
+	<!--  Select the Get Started button on top of the sliders to go to thelsitings page-->
       <!-- direction 1 -->
       <div id="slider-direction-1" class="slider-direction slider-one">
         <div class="container">
