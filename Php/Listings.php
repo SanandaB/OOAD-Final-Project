@@ -1,10 +1,16 @@
+
+<!--
+Listings.php stotes the set of listings, auto-retreived from the database, (which get stored in the listing table 
+when an user creates their listing.)
+-->
+
 <?php	
+	//Connecting to the myssql db
 	$db=mysqli_connect("localhost","root","","testdb");
-	
+	//Checking if the button to select listing is set or not. If set user is redirected to the page with more elaborate listing details.
 	if(isset($_POST['go_btn'])){
 		$_SESSION['username']= $username;
-		//$name="kiki";
-		//$_SESSION['name']= $name;
+		//Redirecting
 		header("location:listingDetail.php");
 		
 	}
@@ -106,21 +112,23 @@ th {
               <div class="collapse navbar-collapse main-menu bs-example-navbar-collapse-1" id="navbar-example">
                 <ul class="nav navbar-nav navbar-right">
                   <li class="active">
-                    <a class="page-scroll" href="#home">Home</a>
+                    <a class="page-scroll" href="guestHome.php">Home</a>
                   </li>
                   <li>
-                    <a class="page-scroll" href="#portfolio">Most Popular</a>
+                    <a class="page-scroll" href="guestHome.php">Most Popular</a>
                   </li>
                   <li>
-                    <a class="page-scroll" href="#services">Categories</a>
+                    <a class="page-scroll" href="guestHome.php">Categories</a>
                   </li>
 				  <li>
-                    <a class="page-scroll" href="#about">About Us</a>
+                    <a class="page-scroll" href="guestHome.php">About Us</a>
                   </li>
                   <li>
-                    <a class="page-scroll" href="#contact">Contact</a>
+                    <a class="page-scroll" href="guestHome.php">Contact</a>
                   </li>
-				  <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php session_start(); echo $_SESSION['username']; ?><span class="caret"></span></a>
+		  <!-- Dropdown menu on top right corner on navigation bar with User who is logged in to the system. Menu contains the following options - 
+			Create Listing, Edit listing, Delete Listing and Signout -->
+		  <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php session_start(); echo $_SESSION['username']; ?><span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                       <li>
 					  <a onclick="openFormCreate()">Create Listing</a>
@@ -253,7 +261,7 @@ th {
                   <!-- End single post -->
 				    </div>
               </div>
-				  
+				  <!-- Table to retrieve list of listings from database-->
                       <p><a href="#"> 
 						<table align="center" border="1px" style="width:1000px; line-height: 70px;">
 							<center>
@@ -266,13 +274,14 @@ th {
 							</tr>
 							<tr>
 						  <?php
-							
+							//Connecting to database
 							$db=mysqli_connect("localhost","root","","testdb");
-							//$usname=$_SESSION['username'];
+							//Querying to select listings
 							$result = mysqli_query($db,"select * from listing");
 							while($rowinfo = $result->fetch_assoc()){
 						  ?>
 						  <tr>
+							 
 							<td><center><a href="#"><?php echo $rowinfo['Name']; ?></a></center></td>
 							<td><center><a href="#"><?php echo $rowinfo['Time']; ?></a></center></td>
 							<td><center><a href="#"><?php echo $rowinfo['Location']; ?></a></center></td>
