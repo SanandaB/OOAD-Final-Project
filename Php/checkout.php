@@ -1,6 +1,16 @@
+
+<!--
+Checkout.php is recahed when user places their order from the menu in the listingDeatils.php page.
+This page shows the order history, based on whatever user selected in previous page.
+Also lets user input address and card details to the system. 
+-->
+
+
 <?php 
 	session_start(); 
+//Connecting to database
 	$db=mysqli_connect("localhost","root","","testdb");
+//checking to see if Order button to Place Order has been selected r not.
 	if (isset($_POST['order_btn'])){
 		$name=mysqli_real_escape_string($db,$_POST['name']);
 		$email=mysqli_real_escape_string($db,$_POST['email']);
@@ -8,10 +18,11 @@
 		$city=mysqli_real_escape_string($db,$_POST['city']);
 		$state=mysqli_real_escape_string($db,$_POST['state']);
 		$zip=mysqli_real_escape_string($db,$_POST['zip']);
-		
+		//Inserting all user inputs into the customerDetails table of the database.
 		$sql = "INSERT INTO customerDetails(name,email,address,city,state,zip) VALUES ('$name','$email','$address','$city','$state','$zip')";
 		mysqli_query($db,$sql);
 		$_SESSION['message']="Order Placed!";
+		//Redirecting user to guestHome.php page once user is done placing order. 
 		header("location:guestHome.php"); 
 	}
 ?>
@@ -254,7 +265,7 @@ th {
 						</div>
 					  
 					  </li>
-                      <li><a href="#" >Edit Listing</a></li>
+                      			  <li><a href="#" >Edit Listing</a></li>
 					  <li><a href="#" >Delete Listing</a></li>
 					  <li><a href="logout.php" >Sign Out</a></li>
                     </ul> 
@@ -280,7 +291,7 @@ th {
 	<div class="cktcontainer" style="padding: 50px 200px 15px 200px">
 	<div class="col-25">
     <p><h2><center>Order History<h4><i class="fa fa-shopping-cart"></i></h4><center></h2></p>
-      
+      <!-- table to display customer order details - customer name, items selected and total cost -->
 	  <table align="center" border="1px" style="width:1000px; line-height: 70px;">
 		<center>
 		<tr>
@@ -292,7 +303,7 @@ th {
 		</tr>
 		<tr>
 	  <?php
-		
+		//Retreiving the customer order information from the customerDetails table in the database to be displayed.
 		$db=mysqli_connect("localhost","root","","testdb");
 		$usname=$_SESSION['username'];
 		$info = mysqli_query($db,"select * from CustomerOrder where CustomerName='$usname'");
@@ -382,6 +393,7 @@ th {
   </div>
         
   <script>
+	  //Script to pop up alert box to notify user that order has been placed, prior redirecting user to the guestHome.php page
 	function validateChk(){
 						alert("Congratulations! Your order has been placed!");
 						//location.replace("file:///C:/Users/sanan/Downloads/C/htdocs/guestHome.php");
